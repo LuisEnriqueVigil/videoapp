@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mas_uno_test/src/controllers/nav_controller.dart';
+import 'package:mas_uno_test/src/domain/controllers/nav_controller.dart';
 import 'package:mas_uno_test/src/ui/pages/home/pages/home_page.dart';
 import 'package:mas_uno_test/src/ui/pages/principal/widgets/icon_menu_page_widget.dart';
 import 'package:mas_uno_test/src/ui/pages/profile/pages/profile_page.dart';
