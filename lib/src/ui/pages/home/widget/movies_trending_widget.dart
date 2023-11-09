@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/data/apis/get_movie_trending.dart';
 import 'package:mas_uno_test/src/domain/models/moviesTrending/response_get_trending_model.dart';
@@ -15,41 +17,82 @@ class MoviesTrendingWidget extends StatelessWidget {
     final getMovieTrendingService = Provider.of<GetMovieTrending>(context);
     
     return SizedBox(
-      height: 150.0,
+      height: 160.0,
       child: FutureBuilder<List<ResponseGetTrendingMovies>>(
         future: getMovieTrendingService.getMovieTrending(),
         builder: (context, snapshot) {
-          return ListView.builder(
+          return (snapshot.connectionState == ConnectionState.waiting)? 
+              const Center(
+                child: SizedBox(
+                  width: 40.0,height: 40.0,
+                  child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                ),
+              )
+              :
+              ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: (snapshot.data?? []).length,
               itemBuilder: (context, index) {
+                Random random = Random();
+                Color color = Color.fromARGB(
+                             255,
+                             random.nextInt(256),
+                             random.nextInt(256),
+                             random.nextInt(256),
+                );
                 return Stack(
                   children: [
                     Container(
                       margin: const EdgeInsets.only(right: 10.0),
-                      width: 100.0,
+                      width: 150.0,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2.5),
-                          color: Colors.red),
+                          color: color.withOpacity(0.50),
+                          border: Border.all(
+                            color: color,
+                            width: 2.0
+                          )
+                       ),
                     ),
-                     Positioned(
-                      bottom: 10.0,right: 20.0,
+                    Positioned(
+                      top: 10.0,left: 5.0,
+                      child: Container(
+                            width: 130.0,
+                            padding: const EdgeInsets.only(left: 5.0, top: 8.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0)
+                            ),
+                            child: TextWidgetApp(
+                                text: snapshot.data?[index].movie.title ?? "",
+                                size: 12.0,
+                                fontWeight: FontWeight.bold,
+                                textAlign: TextAlign.start,
+                                colorText: Colors.black),
+                          ),
+                    ),
+                    Positioned(
+                      bottom: 10.0,left: 8.0,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children:const [
-                          TextWidgetApp(
-                              text: "Nombre",
-                              size: 12.0,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.start,
-                              colorText: Colors.white),
-                          SizedBox(height: 5.0),
-                          TextWidgetApp(
-                              text: "Watcher",
-                              size: 10.0,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.start,
-                              colorText: Colors.white),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 5.0),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.remove_red_eye_outlined,
+                                color: Colors.black,
+                              ),
+                              const SizedBox(width: 10.0),
+                              TextWidgetApp(
+                                  text: snapshot.data?[index].watchers.toString() ?? "",
+                                  size: 10.0,
+                                  fontWeight: FontWeight.bold,
+                                  textAlign: TextAlign.start,
+                                  colorText: Colors.black),
+                            ],
+                          ),
                         ],
                       ),
                     )

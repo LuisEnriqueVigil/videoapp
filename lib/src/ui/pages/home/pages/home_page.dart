@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/ui/pages/home/widget/movies_trending_widget.dart';
+import 'package:mas_uno_test/src/ui/pages/home/widget/popular_movies_widget.dart';
 import 'package:mas_uno_test/src/ui/widgets/text_app_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -37,28 +38,7 @@ class HomePage extends StatelessWidget {
                   textAlign: TextAlign.start,
                   colorText: Colors.black),
               const SizedBox(height: 10.0),
-              Expanded(
-                child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,  
-                  itemCount: 10,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,  
-                      mainAxisSpacing: 0.2,
-                      mainAxisExtent: 100, 
-                  ), 
-                  itemBuilder: (context,index){
-                    return Container(
-                      width: 100.0,
-                      margin: const EdgeInsets.only(right: 5.0,bottom: 5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.5),
-                        color: Colors.red
-                      ),
-                    );
-                  }
-                ),
-              )
+              const PopularMovies()
             ],
           ),
         ),
@@ -66,4 +46,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

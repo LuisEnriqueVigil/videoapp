@@ -2,12 +2,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mas_uno_test/src/domain/models/poularmovies/popular_movie_model.dart';
 import 'package:mas_uno_test/src/env/client_id_api.dart';
 import 'package:mas_uno_test/src/env/url_base_api.dart';
 import 'package:http/http.dart' as http;
-import 'package:mas_uno_test/src/domain/models/moviesTrending/response_get_trending_model.dart';
 
-class GetMovieTrending with ChangeNotifier{
+class GetPopularMovies with ChangeNotifier{
 
   bool _loadingGetMovieTrending = false; 
 
@@ -17,9 +17,9 @@ class GetMovieTrending with ChangeNotifier{
     notifyListeners();
   }
 
-  Future <List<ResponseGetTrendingMovies>> getMovieTrending (
+  Future <List<ResponsePopularMovie>> getPopularMovies (
   ) async{
-    final url = Uri.https( urlBase, "/movies/trending");
+    final url = Uri.https( urlBase, "/movies/popular");
     final resp = await http.get(
        url,
        headers: {
@@ -33,8 +33,9 @@ class GetMovieTrending with ChangeNotifier{
          return http.Response("Error",408);
        }
      ); 
+     print(resp.body);
     if(resp.statusCode == 200){
-      List<ResponseGetTrendingMovies> movies = List<ResponseGetTrendingMovies>.from(json.decode((resp.body)).map((x) => ResponseGetTrendingMovies.fromJson(x)));
+      List<ResponsePopularMovie> movies = List<ResponsePopularMovie>.from(json.decode((resp.body)).map((x) => ResponsePopularMovie.fromJson(x)));
       return movies;
     }
     else{
