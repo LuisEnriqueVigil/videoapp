@@ -45,7 +45,7 @@ class MoviesTrendingWidget extends StatelessWidget {
                 );
                 return InkWell(
                   onTap: ()async{
-                    await Future.delayed(const Duration(milliseconds: 200));
+                    await Future.delayed(const Duration(milliseconds: 100));
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailContentPage(
                       titleMovie: snapshot.data?[index].movie.title ?? "", 
                       yearMovie: snapshot.data?[index].movie.year.toString() ?? "", 

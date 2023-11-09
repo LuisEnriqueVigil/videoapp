@@ -83,12 +83,18 @@ class PopularMovies extends StatelessWidget {
                         decoration: BoxDecoration(
                          borderRadius: BorderRadius.circular(5.0)
                         ),
-                        child: TextWidgetApp(
-                         text: snapshot.data?[index].title ?? "",
-                         size: 10.0,
-                         fontWeight: FontWeight.bold,
-                         textAlign: TextAlign.start,
-                         colorText: Colors.black),
+                        child: Hero(
+                          tag: snapshot.data?[index].title ?? "",
+                          child: Material(
+                            color: Colors.transparent,
+                            child: TextWidgetApp(
+                             text: snapshot.data?[index].title ?? "",
+                             size: 10.0,
+                             fontWeight: FontWeight.bold,
+                             textAlign: TextAlign.start,
+                             colorText: Colors.black),
+                          ),
+                        ),
                       ),
                     ),
                     Positioned(
