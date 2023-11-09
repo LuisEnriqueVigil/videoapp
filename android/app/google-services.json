@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "796225937523",
+    "project_id": "movieapptest-b239a",
+    "storage_bucket": "movieapptest-b239a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796225937523:android:4dc3d51a390ea317c44a06",
+        "android_client_info": {
+          "package_name": "com.example.mas_uno_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWwTw13oMwgz2STdBuJN09gwSF4V7NOj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
