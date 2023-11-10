@@ -114,7 +114,7 @@ class DetailContentPage extends StatelessWidget {
                       ),
                        SizedBox(height: 5.0),
                        TextWidgetApp(
-                        text: "Presiona segun el icono para sumar",
+                        text: "Presiona el icono para sumar",
                         size: 12.0,
                         fontWeight: FontWeight.normal,
                         textAlign: TextAlign.center,

@@ -1,16 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mas_uno_test/src/domain/controllers/profile_controller.dart';
+import 'package:mas_uno_test/src/domain/models/user/user_model.dart';
 import 'package:mas_uno_test/src/ui/pages/profile/widgets/input_profile_info_widget.dart';
 import 'package:mas_uno_test/src/ui/widgets/buttons_app_widget.dart';
 import 'package:mas_uno_test/src/ui/widgets/text_app_widget.dart';
+import 'package:provider/provider.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _isupdatingInfo = false; 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final profileController = Provider.of<ProfileController>(context);
 
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.25),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -49,8 +62,12 @@ class ProfilePage extends StatelessWidget {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        initialValue: profileController.textEditingControllerName.text,
                         hintText: "Nombres",
-                        onChanged: (valor) {},
+                        onChanged: (valor) {
+                          profileController.textEditingControllerName.text = valor;
+                        },
+                        textEditingController: profileController.textEditingControllerName,
                       )
                     ],
                   ),
@@ -69,8 +86,10 @@ class ProfilePage extends StatelessWidget {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        initialValue: profileController.textEditingControllerLastName.text,
                         hintText: "Apellidos",
-                        onChanged: (valor) {},
+                        onChanged: (valor){},
+                        textEditingController: profileController.textEditingControllerLastName,
                       )
                     ],
                   ),
@@ -89,18 +108,61 @@ class ProfilePage extends StatelessWidget {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        initialValue: profileController.textEditingControllerEmail.text,
                         hintText: "Email",
-                        onChanged: (valor) {},
+                        onChanged: (valor) {
+                          profileController.textEditingControllerEmail.text = valor;
+                        },
+                        textEditingController: profileController.textEditingControllerEmail,
                       )
                     ],
                   ),
                 ),
                 const SizedBox(height: 10.0),
                 ButtonsAppWidget(
-                    onTap: (){},
-                    labelButton: "Actualizar perfil",
-                    colorButton: Colors.purple.withOpacity(0.40)
-                )
+                    onTap: (_isupdatingInfo == true) ? 
+                    null 
+                    :
+                    () async {
+                      FocusScope.of(context).unfocus();
+                      setState(() {});
+                      _isupdatingInfo = true;
+                      debugPrint(
+                        profileController.textEditingControllerName.text+
+                        profileController.textEditingControllerLastName.text+
+                        profileController.textEditingControllerEmail.text
+                      );
+
+                      bool isUpdate = await updateAndCreateUser(
+                          email: profileController.textEditingControllerEmail.text, 
+                          lastname:  profileController.textEditingControllerLastName.text, 
+                          name:  profileController.textEditingControllerName.text
+                      );
+                      setState(() {});
+                      _isupdatingInfo = false;
+                      final snackBar =  SnackBar(
+                        backgroundColor:(isUpdate == true)? 
+                           Colors.green :
+                           Colors.red,
+                        duration:  const Duration(milliseconds: 1000),
+                        content:   TextWidgetApp(
+                            text: (isUpdate == true )? 
+                              "Información actualizada correctamente 😁":
+                              "No se pudo actualizar la información",
+                            fontWeight: FontWeight.bold,
+                            colorText: Colors.white,
+                            textAlign: TextAlign.start,
+                            size: 15.0,
+                          ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    labelButton: (_isupdatingInfo == false) ?
+                      "Actualizar perfil":
+                      "Actualizando...",
+                    colorButton:((_isupdatingInfo == false))?
+                       Colors.purple.withOpacity(0.40):
+                       Colors.grey.withOpacity(0.40))
               ],
             ),
           ),
@@ -108,4 +170,30 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+  Future <bool> updateAndCreateUser({
+    required String name,
+    required String lastname,
+    required String email,
+  }) async {
+    try {
+      final docUser = FirebaseFirestore.instance.collection('users').doc("my-id");
+      final json = {
+        "id":"my-id",
+        'name': name,
+        "lastname": lastname,
+        "email": email
+      };
+      await docUser.set(json);
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
+  .collection('users')
+  .snapshots()
+  .map((event) => event.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 }

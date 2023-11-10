@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/data/apis/get_popular_movie.dart';
 import 'package:mas_uno_test/src/domain/models/poularmovies/popular_movie_model.dart';
@@ -47,80 +48,82 @@ class PopularMovies extends StatelessWidget {
                  random.nextInt(256),
                  random.nextInt(256),
                ).withOpacity(0.50);
-              return InkWell(
-                onTap: ()async{
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailContentPage(
-                    titleMovie: snapshot.data?[index].title ?? "", 
-                    yearMovie: snapshot.data?[index].year.toString() ?? "", 
-                    slugs: snapshot.data?[index].ids.slug?? "", 
-                    imdb: snapshot.data?[index].ids.imdb ?? "", 
-                    tmdb: snapshot.data?[index].ids.tmdb.toString() ?? "", 
-                    trackt: snapshot.data?[index].ids.trakt.toString() ?? "", 
-                    colorAppBar: color.withOpacity(0.50)
-                  )));
-                },
-                splashColor: Colors.black,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 100.0,
-                      margin: const EdgeInsets.only(right: 5.0,bottom: 5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.5),
-                        color: color.withOpacity(0.50),
-                        border: Border.all(
-                          color: color,
-                          width: 2.0
-                        )
-                      ),
-                    ),
-                    Positioned(
-                      top: 10.0,left: 5.0,
-                      child: Container(
-                       padding: const EdgeInsets.all(2.5),
-                        width:68.0 ,
+              return BounceInDown(
+                child: InkWell(
+                  onTap: ()async{
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailContentPage(
+                      titleMovie: snapshot.data?[index].title ?? "", 
+                      yearMovie: snapshot.data?[index].year.toString() ?? "", 
+                      slugs: snapshot.data?[index].ids.slug?? "", 
+                      imdb: snapshot.data?[index].ids.imdb ?? "", 
+                      tmdb: snapshot.data?[index].ids.tmdb.toString() ?? "", 
+                      trackt: snapshot.data?[index].ids.trakt.toString() ?? "", 
+                      colorAppBar: color.withOpacity(0.50)
+                    )));
+                  },
+                  splashColor: Colors.black,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 100.0,
+                        margin: const EdgeInsets.only(right: 5.0,bottom: 5.0),
                         decoration: BoxDecoration(
-                         borderRadius: BorderRadius.circular(5.0)
+                          borderRadius: BorderRadius.circular(2.5),
+                          color: color.withOpacity(0.50),
+                          border: Border.all(
+                            color: color,
+                            width: 2.0
+                          )
                         ),
-                        child: Hero(
-                          tag: snapshot.data?[index].title ?? "",
-                          child: Material(
-                            color: Colors.transparent,
-                            child: TextWidgetApp(
-                             text: snapshot.data?[index].title ?? "",
-                             size: 10.0,
-                             fontWeight: FontWeight.bold,
-                             textAlign: TextAlign.start,
-                             colorText: Colors.black),
+                      ),
+                      Positioned(
+                        top: 10.0,left: 5.0,
+                        child: Container(
+                         padding: const EdgeInsets.all(2.5),
+                          width:68.0 ,
+                          decoration: BoxDecoration(
+                           borderRadius: BorderRadius.circular(5.0)
+                          ),
+                          child: Hero(
+                            tag: snapshot.data?[index].title ?? "",
+                            child: Material(
+                              color: Colors.transparent,
+                              child: TextWidgetApp(
+                               text: snapshot.data?[index].title ?? "",
+                               size: 10.0,
+                               fontWeight: FontWeight.bold,
+                               textAlign: TextAlign.start,
+                               colorText: Colors.black),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 5.0,bottom: 15.0,
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           const SizedBox(height: 5.0),
-                           Container(
-                            padding: const EdgeInsets.all(2.5),
-                             width:30.0 ,
-                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.20),
-                              borderRadius: BorderRadius.circular(5.0)
+                      Positioned(
+                        left: 5.0,bottom: 15.0,
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             const SizedBox(height: 5.0),
+                             Container(
+                              padding: const EdgeInsets.all(2.5),
+                               width:30.0 ,
+                               decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.20),
+                                borderRadius: BorderRadius.circular(5.0)
+                               ),
+                               child: TextWidgetApp(
+                                text: snapshot.data?[index].year.toString() ?? "",
+                                size: 10.0,
+                                fontWeight: FontWeight.bold,
+                                textAlign: TextAlign.start,
+                                colorText: Colors.black),
                              ),
-                             child: TextWidgetApp(
-                              text: snapshot.data?[index].year.toString() ?? "",
-                              size: 10.0,
-                              fontWeight: FontWeight.bold,
-                              textAlign: TextAlign.start,
-                              colorText: Colors.black),
-                           ),
-                         ],
+                           ],
+                         ),
                        ),
-                     ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/ui/widgets/text_app_widget.dart';
 
 class ButtonsAppWidget extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String labelButton;
   final Color colorButton;
   const ButtonsAppWidget(

@@ -25,6 +25,7 @@ class PrincipalStackPage extends StatelessWidget {
         onTap: (int i) async{
           indexPageStackController.indexStackPage = i;
         },
+        type: BottomNavigationBarType.shifting,
         currentIndex: indexPageStackController.indexStackPage,
         showSelectedLabels: false,
         showUnselectedLabels: false,

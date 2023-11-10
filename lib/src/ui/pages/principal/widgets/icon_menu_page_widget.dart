@@ -16,16 +16,29 @@ class IconMenuOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(
-          icon,
-          size: 30.0,
-          color: (isActive)? Colors.red : Colors.black,
-        ),
+        (isActive == false) ?
+          Icon(
+            icon,
+            size: 30.0,
+            color: (isActive)? Colors.deepPurple: Colors.black,
+          ):
+          Container(
+            width: 40.0,height: 40.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Colors.deepPurple.withOpacity(0.30)
+            ),
+            child: Icon(
+              icon,
+              size: 30.0,
+              color: (isActive)? Colors.deepPurple: Colors.black,
+            ),
+          ),
         Text(
           label,
           style: TextStyle(
             fontSize: 10.0,
-            color: (isActive)?  Colors.red : Colors.black,
+            color: (isActive)?  Colors.deepPurple: Colors.black,
             fontWeight: FontWeight.normal,
           ),
         )

@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.25),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
         child: SizedBox(
