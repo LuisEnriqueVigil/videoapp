@@ -4,6 +4,7 @@ import 'package:mas_uno_test/src/domain/controllers/nav_controller.dart';
 import 'package:mas_uno_test/src/data/apis/get_movie_trending.dart';
 import 'package:mas_uno_test/src/data/apis/get_popular_movie.dart';
 import 'package:mas_uno_test/src/domain/controllers/profile_controller.dart';
+import 'package:mas_uno_test/src/domain/controllers/sign_in_controller.dart';
 import 'package:mas_uno_test/src/ui/pages/splash/pages/splash_screen.dart';
 import 'package:provider/provider.dart';
  void main() async {
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_)=> NavController()),
         ChangeNotifierProvider(create: (_)=> GetMovieTrending()),
         ChangeNotifierProvider(create: (_)=> GetPopularMovies()),
-        ChangeNotifierProvider(create: (_)=> ProfileController())
+        ChangeNotifierProvider(create: (_)=> ProfileController()),
+        ChangeNotifierProvider(create: (_)=> SignInControllerApp()),
+
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

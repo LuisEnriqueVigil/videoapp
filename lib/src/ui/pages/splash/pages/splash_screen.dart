@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/domain/controllers/profile_controller.dart';
+import 'package:mas_uno_test/src/domain/controllers/sign_in_controller.dart';
 import 'package:mas_uno_test/src/domain/models/user/user_model.dart';
 import 'package:mas_uno_test/src/ui/pages/login/pages/login_page.dart';
 import 'package:mas_uno_test/src/ui/pages/principal/pages/principal_page.dart';
@@ -64,29 +65,43 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future checkLogin (BuildContext context) async{//}
     final profileController  = Provider.of<ProfileController>(context,listen: false);
+    final signInControllerApp = Provider.of<SignInControllerApp>(context,listen: false);
     
     await Future.delayed(const Duration(seconds: 2));
-    
-    UserModel? userModel =  await readUser("my_id");
+    String idUserDoc = await signInControllerApp.getToken();
+
+    UserModel? userModel =  await readUser(idUserDoc);
 
     if(userModel?.name != "name"){
 
       profileController.textEditingControllerEmail.text = (userModel??UserModel(name: "name", lastname: "lastname", email: "email")).email;
       profileController.textEditingControllerLastName.text = (userModel??UserModel(name: "name", lastname: "lastname", email: "email")).lastname;
       profileController.textEditingControllerName.text = (userModel??UserModel(name: "name", lastname: "lastname", email: "email")).name;
-
+       final snackBar =  SnackBar(
+         backgroundColor:Colors.green , 
+         duration:  const Duration(milliseconds: 1000),
+         content:   TextWidgetApp(
+             text: "Bienvenid@ ${profileController.textEditingControllerName.text}",
+             fontWeight: FontWeight.bold,
+             colorText: Colors.white,
+             textAlign: TextAlign.start,
+             size: 18.0,
+           ),
+       );
+       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // ignore: use_build_context_synchronously
       return Navigator.pushReplacement(
         context, PageRouteBuilder(
         pageBuilder: (_,__,___)=>const  PrincipalStackPage(),
         transitionDuration: const Duration(milliseconds: 0)
       ));
+      
     } 
     else if (userModel?.name == "name"){
         // ignore: use_build_context_synchronously
         return Navigator.pushReplacement(
         context, PageRouteBuilder(
-        pageBuilder: (_,__,___)=>const  LoginPage(),
+        pageBuilder: (_,__,___)=>const  SignInPage(),
         transitionDuration: const Duration(milliseconds: 0)
       ));
     }
@@ -94,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // ignore: use_build_context_synchronously
       return Navigator.pushReplacement(
         context, PageRouteBuilder(
-        pageBuilder: (_,__,___)=>const  LoginPage(),
+        pageBuilder: (_,__,___)=>const  SignInPage(),
         transitionDuration: const Duration(milliseconds: 0)
       ));
     }
@@ -103,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   
     Future<UserModel?> readUser(String id) async{
-      final docUser = FirebaseFirestore.instance.collection('users').doc('my-id');
+      final docUser = FirebaseFirestore.instance.collection('users').doc(id);
       final snapshot = await docUser.get();
       if(snapshot.exists){
         return UserModel.fromJson(snapshot.data()!);

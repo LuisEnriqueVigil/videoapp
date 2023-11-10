@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^2.4.0
   animate_do: ^3.0.2
   cloud_firestore: ^4.13.0
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:

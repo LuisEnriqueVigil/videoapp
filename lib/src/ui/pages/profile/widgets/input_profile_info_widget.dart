@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:mas_uno_test/src/domain/controllers/profile_controller.dart';
+import 'package:provider/provider.dart';
 
 class InputProfileInfo extends StatelessWidget {
   final String hintText;
   final TextEditingController textEditingController;
-  final Function(String) onChanged;
   final String initialValue;
+  final String inputType; 
   const InputProfileInfo(
       {Key? key,
+      required this.inputType,
       required this.hintText,
-      required this.onChanged,
       required this.textEditingController,
       required this.initialValue
     })
@@ -17,6 +19,7 @@ class InputProfileInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final profileController = Provider.of<ProfileController>(context);
 
     return Container(
       height: 46.0,
@@ -29,11 +32,23 @@ class InputProfileInfo extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextFormField(
-          controller: textEditingController,
+          controller: (inputType == "email") ?
+            profileController.textEditingControllerEmail:
+            (inputType == "name")?
+            profileController.textEditingControllerName:
+            profileController.textEditingControllerLastName,
           style: const TextStyle(color: Colors.black),
-          onChanged: (valor){
-            textEditingController.text = valor;
-          },
+          onChanged: (inputType == "email") ?
+            (valor){
+              profileController.email = valor; 
+            }:
+            (inputType == "name")?
+            (valor){
+              profileController.name = valor; 
+            }:
+            (valor){
+              profileController.lastName = valor; 
+            },
           textAlign: TextAlign.start,
           autocorrect: false,
           keyboardType: TextInputType.emailAddress,

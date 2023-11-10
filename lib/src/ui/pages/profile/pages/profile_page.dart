@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mas_uno_test/src/domain/controllers/profile_controller.dart';
+import 'package:mas_uno_test/src/domain/controllers/sign_in_controller.dart';
 import 'package:mas_uno_test/src/domain/models/user/user_model.dart';
 import 'package:mas_uno_test/src/ui/pages/profile/widgets/input_profile_info_widget.dart';
 import 'package:mas_uno_test/src/ui/widgets/buttons_app_widget.dart';
@@ -21,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final profileController = Provider.of<ProfileController>(context);
+    final signInControllerApp = Provider.of<SignInControllerApp>(context);
 
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.25),
@@ -62,11 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        inputType: "name",
                         initialValue: profileController.textEditingControllerName.text,
                         hintText: "Nombres",
-                        onChanged: (valor) {
-                          profileController.textEditingControllerName.text = valor;
-                        },
                         textEditingController: profileController.textEditingControllerName,
                       )
                     ],
@@ -86,9 +86,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        inputType: "lastname",
                         initialValue: profileController.textEditingControllerLastName.text,
                         hintText: "Apellidos",
-                        onChanged: (valor){},
                         textEditingController: profileController.textEditingControllerLastName,
                       )
                     ],
@@ -108,11 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           colorText: Colors.black),
                       const SizedBox(height: 10.0),
                       InputProfileInfo(
+                        inputType: "email",
                         initialValue: profileController.textEditingControllerEmail.text,
                         hintText: "Email",
-                        onChanged: (valor) {
-                          profileController.textEditingControllerEmail.text = valor;
-                        },
                         textEditingController: profileController.textEditingControllerEmail,
                       )
                     ],
@@ -132,8 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         profileController.textEditingControllerLastName.text+
                         profileController.textEditingControllerEmail.text
                       );
-
+                      String idUserDoc = await signInControllerApp.getToken();
                       bool isUpdate = await updateAndCreateUser(
+                          idUser: idUserDoc,
                           email: profileController.textEditingControllerEmail.text, 
                           lastname:  profileController.textEditingControllerLastName.text, 
                           name:  profileController.textEditingControllerName.text
@@ -172,14 +171,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future <bool> updateAndCreateUser({
+    required String idUser,
     required String name,
     required String lastname,
     required String email,
   }) async {
     try {
-      final docUser = FirebaseFirestore.instance.collection('users').doc("my-id");
+      final docUser = FirebaseFirestore.instance.collection('users').doc(idUser);
       final json = {
-        "id":"my-id",
+        "id":idUser,
         'name': name,
         "lastname": lastname,
         "email": email
